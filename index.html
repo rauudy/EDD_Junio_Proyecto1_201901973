@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="main">
+        <div class="navbar">
+            <div class="icon">
+                <h2 class="logo">Catsbooks</h2>
+            </div>
+
+            <div class="menu">
+                <ul>
+                    <li><a href="#">HOME</a></li>
+                    <li><a href="#">ABOUT</a></li>
+                    <li><a href="#">SERVICIE</a></li>
+                    <li><a href="#">DESIGN</a></li>
+                    <li><a href="#">CONTACT</a></li>
+                </ul>
+            </div>
+            <div class="finsesion">
+                <input onclick="salir()" class="" id="finn" type="button" name="" value="Salir" style="display: none;">
+            </div>
+        </div>
+
+        <div class="carga" id="cargamasiva" style="display: none;">
+            <div class="clientes">
+                <label for="formUser">Usuarios</label>
+                <input class="form-control" type="file" id="formUser">
+            </div>
+            <div class="autores">
+                <label for="formAutores">Autores</label>
+                <input class="form-control" type="file" id="formAutores">
+            </div>
+            <div class="libros">
+                <label for="formLibros">Libros</label>
+                <input class="form-control" type="file" id="formLibros">
+            </div>
+            <button class="btnlista" onclick="verListaUsuarios()">Mostrar usuarios</button>
+            <button class="btnMatriz" onclick="verMatrizOrtogonal()">Mostrar Fantasia</button>
+            <button onclick="grafoArbol()">Mostrar Grafo Abb</button>
+        </div>
+
+        <dav class="content">
+            <h1>Hola<br><span id="logeado" class="logeado">Development</span><br>Como estas</h1>
+            <p class="par">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Expedita aut <br>suscipit, magni
+                dolorem, possimus eius ducimus quasi reprehenderit minus ullam repellendus <br>eum sit iure. Atque,
+                totam fuga! Repellendus, nostrum hic.</p>
+            <button class="cn"><a href="#">JOIN US</a></button>
+            
+            <div class="formulario" id="formLog">
+                <h2>Login</h2>
+                <form name="fff" action="InicioSecion">
+                    <input type="txt" name="nombre" class="txt" placeholder="Email">
+                    <input type="password" name="password" class="txt" placeholder="Password">
+                    <input onclick="log()" type="button" class="btnn" value="Login">
+                </form>
+            </div>
+        </dav>
+        <div class="abb"></div>
+
+    </div>
+    <script src="//d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
+    <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
