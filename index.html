@@ -44,17 +44,20 @@
                 <input class="form-control" type="file" id="formLibros">
             </div>
             <button class="btnlista" onclick="verListaUsuarios()">Mostrar usuarios</button>
-            <button class="btnMatriz" onclick="verMatrizOrtogonal()">Mostrar Fantasia</button>
-            <button onclick="grafoArbol()">Mostrar Grafo Abb</button>
+            <button class="btnlista" onclick="verListaLibros()">Mostrar libros</button>
+            <button class="btnlista" onclick="verListadeLibros()">Mostrar Vista Libros</button>
+            <button class="btnlista" onclick="verMatrizOrtogonal()">Mostrar Fantasia</button>
+            <button class="btnlista" onclick="grafoArbol()">Mostrar Grafo Abb</button>
         </div>
 
         <dav class="content">
-            <h1>Hola<br><span id="logeado" class="logeado">Development</span><br>Como estas</h1>
-            <p class="par">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Expedita aut <br>suscipit, magni
-                dolorem, possimus eius ducimus quasi reprehenderit minus ullam repellendus <br>eum sit iure. Atque,
-                totam fuga! Repellendus, nostrum hic.</p>
+            <h1>Hola<br><span id="logeado" class="logeado">Gatitos</span><br>Como estas</h1>
+            <p class="par">La librería “Catsbooks” posee varias sucursales dentro del País,<br> esta cuenta con una gran
+                cantidad de libros, revistas, historietas y <br>demás material de lectura. Debido a la pandemia las
+                ventas se han <br>disminuido en un gran porcentaje ya que las sucursales se encuentran <br>ubicadas en
+                lugares muy retirados de la ciudad capital </p>
             <button class="cn"><a href="#">JOIN US</a></button>
-            
+
             <div class="formulario" id="formLog">
                 <h2>Login</h2>
                 <form name="fff" action="InicioSecion">
@@ -64,9 +67,49 @@
                 </form>
             </div>
         </dav>
-        <div class="abb"></div>
-
     </div>
+    <div class="vistaautoresbibio" id="vistaautoresbibio" style="display: none;">
+        <div class="autoresbibio" id="autoresbibio">
+            <!--grid de los Autores-->
+        </div>
+    </div>
+
+    <div class="ejemplares" id="ejemplares">
+    </div>
+    <div class="vistalibros" style="display: none;" id="VistaLibrosOrdenados">
+        <h2 style="color: white;">Vista Libro Ascendente</h2>
+        <div class="vstlibros" id="vstlibros">
+            <!--grid de los Libro-->
+        </div>
+        <h2 style="color: white;">Vista Libro Descendente</h2>
+        <div class="vstlibros" id="vstlibros2">
+            <!--grid de los Libro-->
+        </div>
+    </div>
+    <div class="vistaarbolautores">
+        <div class="abb"></div>
+    </div>
+
+    <div class="matrizortogonal" id="matrizortogonal" style="display: none;">
+        <h2 style="color: white;">Librera de Fantasia</h2>
+        <div class="ortogonalLibrera" id="ortogonalLibrera">
+            <div class="vistalibrera" id="vistalibrera"></div>
+            <div class="pedirlibros" id="pedirlibros">
+                <form class="formpedirlibro" name="pedirlib" action="PedirLibro">
+                    <label for="nombrelibroooo" style="color: white;">Nombre Libro</label>
+                    <input type="txt" name="nombrelibro" id="nombrelibroooo" class="pedi" placeholder="Nombre Libro">
+                    <label for="cantidadlibrooo" style="color: white;">Cantidad Libro</label>
+                    <input type="txt" name="cantidadlibro" id="cantidadlibrooo" class="pedi" placeholder="Cantidad de Libro">
+                    <input onclick="log()" type="button" class="btnnpedi" value="comprar">
+                </form>
+            </div>
+        </div>
+        <div class="ortogonalestructura" id="ortogonalestructura">
+            <div class="vistaestructura" id="vistaestructura"></div>
+        </div>
+    </div>
+
+
     <script src="//d3js.org/d3.v5.min.js"></script>
     <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
     <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>

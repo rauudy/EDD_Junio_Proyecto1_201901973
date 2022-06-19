@@ -1,4 +1,4 @@
-//------------------------------------------Importar Estructuras
+//------------------------------------------IMPORT ESTRUCTURAS
 //import {ListaEnlazada} from './Struct/ListaSimple.js';
 
 //---------------------------------------------------------------- LISTA ENLAZADA USUARIOS
@@ -27,6 +27,27 @@ class ListaEnlazada {
             this.head = nuevo;
         }
     }
+
+    ordenBurbuja() {
+        if (this.head != null) {
+            let aux = this.head;
+            while (aux.siguiente != null) {
+                let temp = aux.siguiente;
+                while (temp != null) {
+                    if (temp.dato.nombrelibro < aux.dato.nombrelibro) {
+                        let cambio = aux.dato;
+                        aux.dato = temp.dato;
+                        temp.dato = cambio;
+                    }
+                    temp = temp.siguiente;
+                }
+                aux = aux.siguiente;
+            }
+        } else {
+            alert("No Hay Nada");
+        }
+    }
+
 
     buscarUsuario(valor) {
         if (this.head != null) {
@@ -88,7 +109,27 @@ class ListaEnlazada {
         }
     }
 
-    mostrar() {
+    buscarAutor(valor) {
+        if (this.head != null) {
+            let existe = false;
+            let aux = this.head;
+            while (aux != null && existe == false) {
+                if (aux.dato.autor === valor) {
+                    existe = true;
+                    //console.log(`Si se encontro el dato "${aux.dato.usuario}" en la lista`);
+                    return aux.dato.autor;
+                }
+                aux = aux.siguiente;
+            }
+            if (existe == false) {
+                console.log(`No se encontro el dato "${valor}" en la lista`)
+            }
+        } else {
+            console.log("Esta Vacia");
+        }
+    }
+
+    mostrarUsuario() {
         if (this.head != null) {
             let aux = this.head;
             while (aux != null) {
@@ -100,8 +141,492 @@ class ListaEnlazada {
         }
     }
 
+    mostrarLibro() {
+        if (this.head != null) {
+            let aux = this.head;
+            while (aux != null) {
+                console.log("----------------------------");
+                console.log("Libro: " + aux.dato.nombrelibro);
+                console.log("Autor: " + aux.dato.nombreautor);
+                aux = aux.siguiente;
+            }
+        }
+    }
+
+    mostrarAutor() {
+        if (this.head != null) {
+            let aux = this.head;
+            while (aux != null) {
+                console.log("----------------------------");
+                console.log("Autor: " + aux.dato.nombreautor);
+                console.log("biografia: " + aux.dato.biografia);
+                aux = aux.siguiente;
+            }
+        }
+    }
+
+    verLibro() {
+        if (this.head != null) {
+            let aux = this.head;
+            let contador = 0;
+            while (aux != null) {
+                //console.log("----------------------------");
+                let txt = "<div" + contador + "><article><br>";
+                txt += "Titulo: " + aux.dato.nombrelibro + "<br>";
+                txt += "Autor: " + aux.dato.nombreautor;
+                document.getElementById('vstlibros').innerHTML += txt;
+                txt = "<br></article></div" + contador + ">";
+                contador++;
+                aux = aux.siguiente;
+            }
+        }
+    }
+
+    verAutoresBB(div) {
+        if (this.head != null) {
+            let aux = this.head;
+            let contador = 0;
+            while (aux != null) {
+                //console.log("----------------------------");
+                let txt = "<div class=\"cardAutores\"><div class=\"textos\">";
+                txt += "<h3>Autor: " + aux.dato.nombreautor + "</h3>";
+                txt += "<p>Biografia: " + aux.dato.biografia + "</p>";
+                document.getElementById(div).innerHTML += txt;
+                txt = "</div></div>";
+                contador++;
+                aux = aux.siguiente;
+            }
+        }
+    }
+
 
 }
+//---------------------------------------------------------------- LISTA DOBLEMENTE ENLAZADA
+class NodoD {
+    constructor(dato) {
+        this.dato = dato;
+        this.siguiente = null;
+        this.anterior = null;
+    }
+}
+
+class ListaDobleEnlazada {
+    constructor() {
+        this.head = null;
+    }
+
+    insertar(dato) {
+        let p, q;
+        p = new NodoD(dato);
+        p.siguiente = null;
+        if (this.head != null) {
+            q = this.head;
+            while (q.siguiente != null) {
+                q = q.siguiente;
+            }
+            q.siguiente = p;
+            p.anterior = q;
+        } else {
+            this.head = p;
+            p.anterior = q;
+        }
+    }
+
+    ultimo() {
+        let temp = this.head;
+        while (temp != null && temp.siguiente != null) {
+            temp = temp.siguiente;
+        }
+        return temp;
+    }
+
+    mostrarLibro() {
+        let p;
+        if (this.head != null) {
+            p = this.head;
+            while (p != null) {
+                console.log(p.dato.nombrelibro);
+                p = p.siguiente;
+            }
+        }
+    }
+
+    verLibro(div) {
+        if (this.head != null) {
+            let aux = this.head;
+            let contador = 0;
+            while (aux != null) {
+                //console.log("----------------------------");
+                let txt = "<div class=\"cardlibros\"><div class=\"textos\">";
+                txt += "<h3>Titulo: " + aux.dato.nombrelibro + "</h3>";
+                txt += "<p>Autor: " + aux.dato.nombreautor + "</p>";
+                document.getElementById(div).innerHTML += txt;
+                txt = "</div></div" + contador + ">";
+                contador++;
+                aux = aux.siguiente;
+            }
+        }
+    }
+
+    ordenBurbuja() {
+        if (this.head != null) {
+            let aux = this.head;
+            while (aux.siguiente != null) {
+                let temp = aux.siguiente;
+                while (temp != null) {
+                    if (temp.dato.nombrelibro < aux.dato.nombrelibro) {
+                        let cambio = aux.dato;
+                        aux.dato = temp.dato;
+                        temp.dato = cambio;
+                    }
+                    temp = temp.siguiente;
+                }
+                aux = aux.siguiente;
+            }
+        } else {
+            alert("No Hay Nada");
+        }
+    }
+
+    parition(first, last) {
+        var front, pivot, temp;
+        pivot = first;
+        front = first;
+        temp = 0;
+
+        while (front !== null && front !== last) {
+            if (front.dato.nombrelibro > last.dato.nombrelibro) { // Ascendente < , Descendente >
+                pivot = first;
+                temp = first.dato;
+                first.dato = front.dato;
+                front.dato = temp;
+                first = first.siguiente;
+            }
+
+            front = front.siguiente;
+        }
+
+        temp = first.dato;
+        first.dato = last.dato;
+        last.dato = temp;
+        return pivot;
+    }
+
+
+    quick_sort(first, last) {
+        var pivot;
+        if (first === last) {
+            return;
+        }
+        pivot = this.parition(first, last);
+        if (pivot !== null && pivot.siguiente !== null) {
+            this.quick_sort(pivot.siguiente, last);
+        }
+        if (pivot !== null && first !== pivot) {
+            this.quick_sort(first, pivot);
+        }
+    }
+
+    graficar(div) {
+        var codigodot = "digraph G{\nbgcolor=\"transparent\"\nlabel=\" Libros \";\nnode [shape=box];\n";
+        var temporal = this.head;
+        var conexiones = "";
+        var nodos = "";
+        var numnodo = 0;
+        while (temporal != null) {
+            nodos += "N" + numnodo + "[label=\"" + temporal.dato.nombrelibro + "\" style=filled fillcolor=yellow];\n";
+            if (temporal.siguiente != null) {
+                var auxnum = numnodo + 1;
+                conexiones += "N" + numnodo + " -> N" + auxnum + "[dir=both];\n";
+            }
+            temporal = temporal.siguiente;
+            numnodo++;
+        }
+        codigodot += "//agregando nodos\n";
+        codigodot += nodos + "\n";
+        codigodot += "//agregando conexiones o flechas\n";
+        codigodot += "{rank=same;\n" + conexiones + "\n}\n}";
+        //console.log(codigodot);
+
+        d3.select("." + div).graphviz()
+            .renderDot(codigodot)
+    }
+
+}
+//---------------------------------------------------------------- LISTA DE LISTAS
+
+class NodoLL {
+    constructor(dato) {
+        this.dato = dato;
+        this.siguiente = null;
+        this.abajo = null;
+    }
+}
+
+class NodoLS {
+    constructor(valor) {
+        this.valor = valor;
+        this.siguiente = null;
+    }
+}
+
+class ListadeListas {
+    constructor() {
+        this.cabecera = null;
+        this.ultimo = null;
+        this.tamanio = 0;
+    }
+
+    //Metodos para insertar
+
+    //Insertar Album
+    insertarCabeza(dato) {
+        let temporal = new NodoLL(dato);
+        temporal.siguiente = this.cabecera;
+        this.cabecera = temporal;
+    }
+
+    existeCabeza(dato) {
+        let temporal = this.cabecera;
+        while (temporal != null) {
+            if (dato == temporal.dato) {
+                return true;
+            }
+            //console.log(temporal.dato);
+            temporal = temporal.siguiente;
+        }
+        return false;
+    }
+
+    //Insertar Cancion
+    insertar(valorcabeza, valor) {
+        if (this.existeCabeza(valorcabeza)) {
+            //this.insertarCabeza(valorcabeza);
+            let temporalCabecera = this.cabecera;
+            //Recorrer toda la lista de albums
+            while (temporalCabecera != null) {
+                if (temporalCabecera.dato == valorcabeza) {
+                    //console.log("Si se encontro el album " + valorcabeza);
+                    let nuevonodolista = new NodoLS(valor);
+                    var iniciolistasimple = temporalCabecera.abajo;
+                    temporalCabecera.abajo = nuevonodolista;
+                    nuevonodolista.siguiente = iniciolistasimple;
+                    break;
+                }
+                temporalCabecera = temporalCabecera.siguiente;
+            }
+            if (temporalCabecera == null) {
+                console.log("No se encontro la cabecera en la lista");
+            }
+        } else {
+            this.insertarCabeza(valorcabeza);
+            let temporalCabecera = this.cabecera;
+            //Recorrer toda la lista de albums
+            while (temporalCabecera != null) {
+                if (temporalCabecera.dato == valorcabeza) {
+                    //console.log("Si se encontro el album " + valorcabeza);
+                    let nuevonodolista = new NodoLS(valor);
+                    var iniciolistasimple = temporalCabecera.abajo;
+                    temporalCabecera.abajo = nuevonodolista;
+                    nuevonodolista.siguiente = iniciolistasimple;
+                    break;
+                }
+                temporalCabecera = temporalCabecera.siguiente;
+            }
+            if (temporalCabecera == null) {
+                console.log("No se encontro la cabecera en la lista");
+            }
+        }
+    }
+
+    mostrarCabeceras() {
+        let temporal = this.cabecera;
+        console.log("****** Cabecera ****");
+        while (temporal != null) {
+            console.log(temporal.dato);
+            temporal = temporal.siguiente;
+        }
+    }
+
+    grafic(div) {
+        var codigodot = "digraph G{\nlabel=\" ListadeListas \";\nnode [shape=box];\n";
+        var temporal = this.cabecera;
+        var conexiones = "";
+        var conexiones2 = "";
+        var nodos = "";
+        var numnodo = 0;
+        var numnodo2 = 1;
+        while (temporal != null) {
+            nodos += "N" + numnodo + "[label=\"" + temporal.dato + "\" ];\n";
+            if (temporal.siguiente != null) {
+                var auxnum = numnodo + 1;
+                conexiones += "N" + numnodo + " -> N" + auxnum + ";\n";
+            }
+            if (this.existeCabeza(temporal.dato)) {
+                var temporalnodolistasimple = temporal.abajo;
+                var cabeza = true;
+                while (temporalnodolistasimple != null) {
+                    nodos += "B" + numnodo2 + "[label=\"" + temporalnodolistasimple.valor + "\" ];\n";
+                    if (temporalnodolistasimple.siguiente != null) {
+                        if (cabeza) {
+                            conexiones2 += "N" + numnodo + " -> B" + numnodo2 + ";\n";
+                        }
+                        var auxnum2 = numnodo2 + 1;
+                        conexiones2 += "B" + numnodo2 + " -> B" + auxnum2 + ";\n";
+                    }
+                    temporalnodolistasimple = temporalnodolistasimple.siguiente;
+                    numnodo2++;
+                    cabeza = false;
+                }
+            }
+            temporal = temporal.siguiente;
+            numnodo++;
+        }
+        codigodot += "//agregando nodos\n";
+        codigodot += nodos + "\n";
+        codigodot += "//agregando conexiones o flechas\n";
+        codigodot += "{rank=same;\n" + conexiones + "\n}\n";
+        codigodot += "{\n" + conexiones2 + "\n}\n}";
+        console.log(codigodot);
+
+        d3.select("." + div).graphviz()
+            .width(1500)
+            .height(500)
+            .renderDot(codigodot)
+    }
+}
+
+//---------------------------------------------------------------- PILA DE EJEMPLARES
+class NodoP {
+    constructor(dato) {
+        this.dato = dato;
+        this.abajo = null;
+    }
+}
+
+class Pila {
+    constructor() {
+        this.cima = null;
+    }
+
+    //metodos especiales
+
+    //insertar en una pila
+    push(dato) {
+        let temporal = new NodoP(dato);
+        temporal.abajo = this.cima;
+        this.cima = temporal;
+    }
+
+    //eliminar en una pila
+    pop() {
+        //this.cima = this.cima.abajo;
+        let temporal = this.cima;
+        this.cima = null;
+        this.cima = temporal.abajo;
+        temporal = null;
+    }
+
+    //Ver la cima
+    peek() {
+        console.log(this.cima.cartas);
+    }
+
+    graficar(div) {
+        var codigodot = "digraph Pila\n{\nrankdir =LR;\nnode[shape=Mrecord];\n";
+        var nodos = "Nodo[xlabel=Pila label = \"";
+        let temporal = this.cima;
+        while (temporal != null) {
+            if (temporal.abajo == null) {
+                nodos += temporal.cartas
+            } else {
+                nodos += temporal.cartas + " | ";
+            }
+            temporal = temporal.abajo;
+        }
+        nodos += "\"];\n";
+        codigodot += nodos;
+        codigodot += "\n}";
+        console.log(codigodot);
+
+        d3.select("." + div).graphviz()
+            .width(900)
+            .height(900)
+            .renderDot(codigodot)
+    }
+}
+
+//---------------------------------------------------------------- COLA DE ESPERA
+
+class NodoCC {
+    constructor(dato) {
+        this.dato = dato;
+        this.siguiente = null;
+    }
+}
+
+class Cola {
+    constructor() {
+        this.frente = null;
+    }
+
+    enqueue(dato) {
+        let nuevo = new NodoCC(dato);
+        nuevo.siguiente = null;
+        if (this.frente != null) {
+            let aux = this.frente;
+            while (aux.siguiente != null) {
+                aux = aux.siguiente;
+            }
+            aux.siguiente = nuevo;
+        } else {
+            this.frente = nuevo;
+        }
+    }
+
+    peek() {
+        if (this.frente != null) {
+            console.log("Frente: " + this.frente.dato);
+        }
+    }
+
+    dequeue() {
+        if (this.frente != null) {
+            let aux = this.frente;
+            this.frente = this.frente.siguiente;
+            aux = null;
+        }
+    }
+
+    graficar() {
+        var codigodot = "digraph G{\nbgcolor=\"transparent\"\nlabel=\" Cola \";\nnode [shape=box];\n";
+        var temporal = this.frente;
+        var conexiones = "";
+        var nodos = "";
+        var numnodo = 0;
+        while (temporal != null) {
+            nodos += "N" + numnodo + "[label=\"" + temporal.dato + "\" style=filled fillcolor=yellow];\n";
+            if (temporal.siguiente != null) {
+                var auxnum = numnodo + 1;
+                conexiones += "N" + numnodo + " -> N" + auxnum + ";\n";
+            }
+            temporal = temporal.siguiente;
+            numnodo++;
+        }
+        codigodot += "//agregando nodos\n";
+        codigodot += nodos + "\n";
+        codigodot += "//agregando conexiones o flechas\n";
+        codigodot += "{rank=same;\n" + conexiones + "\n}\n}";
+        //console.log(codigodot);
+
+        d3.select(".lienzo").graphviz()
+            .width(900)
+            .height(100)
+            .renderDot(codigodot)
+    }
+}
+
+
 //---------------------------------------------------------------- ARBOL B
 class Node {
     constructor(_id, _nombre) {
@@ -142,7 +667,7 @@ class Grafo {
     constructor() { }
     graficarArbol(raiz) {
         var acum, acumuladores, estructuras;
-        estructuras = "digraph G{\nnode[fixedsize=true width=2 height=1];\n";
+        estructuras = "digraph G{\nbgcolor=transparent label=\"Autores\";node[fixedsize=true width=2 height=1];\n";
         acum = "";
         acumuladores = [estructuras, acum];
 
@@ -154,14 +679,12 @@ class Grafo {
         console.log(acumuladores[0]);
 
         d3.select(".abb").graphviz()
-            .width(1500)
-            .height(1000)
             .renderDot(acumuladores[0])
     }
 
     recorrerArbol(raiz, acum) {
         if (raiz) {
-            acum[1] += raiz.id.toString() + "[label=\"" + raiz.nombre.toString() + "\"];\n";
+            acum[1] += raiz.id.toString() + "[label=\"" + raiz.nombre.toString() + "\",style=filled fillcolor=white];\n";
             if (raiz.izq.raiz !== null) {
                 acum[1] += "{" + raiz.id.toString() + "} -> {" + raiz.izq.raiz.id.toString() + "};\n";
             }
@@ -258,11 +781,104 @@ class MatrizO {
             temporaly = temporaly.abajo;
         }
     }
+
+    graph(div) {
+        let filas = "F";
+        let colums = "C";
+        let codigodot = "digraph G{bgcolor=lightblue\n  label=\" Librera Fantasia \";\n  node [shape=box];\n";
+        let nodos = "";
+        let conexcionesss = "";
+        var x = 1
+        var cabezax = this.listahorizontal.buscarLista(x)
+        while (cabezax != null) {
+            var temporaly = cabezax.abajo
+            while (temporaly != null) {
+                nodos += "  " + filas + temporaly.x + colums + temporaly.y + "[label=\"" + temporaly.valor + "\"  width = 1.5 style = filled fillcolor=gray, group = " + temporaly.y + "];\n";
+                if (temporaly.abajo != null) {
+                    conexcionesss += filas + temporaly.x + colums + temporaly.y + "->";
+                } else {
+                    conexcionesss += filas + temporaly.x + colums + temporaly.y;
+                }
+                temporaly = temporaly.abajo
+            }
+            codigodot += nodos
+            codigodot += "{rank=same;" + conexcionesss + "[dir=both color=red]}\n"
+            conexcionesss = "";
+            nodos = "";
+            x++
+            cabezax = cabezax.siguiente
+        }
+
+        for (let index = 1; index < 26; index++) {
+            for (let j = 1; j < 26; j++) {
+                if (j == 25) {
+                    conexcionesss += filas + j + colums + index + "[dir=both color=red]\n";
+                } else {
+                    conexcionesss += filas + j + colums + index + "->";
+                }
+            }
+        }
+        codigodot += conexcionesss + "\n}";
+
+        //console.log(codigodot)
+        d3.select("." + div).graphviz()
+            .width(1000)
+            .height(700)
+            .renderDot(codigodot)
+    }
+
+    libreraMatriz(div) {
+        let filas = "F";
+        let colums = "C";
+        let codigodot = "digraph G{bgcolor=transparent\n  label=\" Librera Fantasia \";\n  node [shape=box];\n";
+        let nodos = "";
+        let conexcionesss = "";
+        var x = 1
+        var cabezax = this.listahorizontal.buscarLista(x)
+        while (cabezax != null) {
+            var temporaly = cabezax.abajo
+            while (temporaly != null) {
+                nodos += "  " + filas + temporaly.x + colums + temporaly.y + "[label=\"" + temporaly.valor + "\"  width = 1.5 style = filled fillcolor=gray87, group = " + temporaly.y + "];\n";
+                if (temporaly.abajo != null) {
+                    conexcionesss += filas + temporaly.x + colums + temporaly.y + "->";
+                } else {
+                    conexcionesss += filas + temporaly.x + colums + temporaly.y;
+                }
+                temporaly = temporaly.abajo
+            }
+            codigodot += nodos
+            codigodot += "{rank=same;" + conexcionesss + "[dir=both color=\"transparent\"]}\n"
+            conexcionesss = "";
+            nodos = "";
+            x++
+            cabezax = cabezax.siguiente
+        }
+
+        for (let index = 1; index < 26; index++) {
+            for (let j = 1; j < 26; j++) {
+                if (j == 25) {
+                    conexcionesss += filas + j + colums + index + "[dir=both color=\"transparent\"]\n";
+                } else {
+                    conexcionesss += filas + j + colums + index + "->";
+                }
+            }
+        }
+        codigodot += conexcionesss + "\n}";
+
+        //console.log(codigodot)
+        d3.select("."+div).graphviz()
+            .width(1300)
+            .height(700)
+            .renderDot(codigodot)
+    }
 }
 
 
 //---------------------------------------------------------------- ESTRUCTURAS
 var lista = new ListaEnlazada();
+var listaAutores = new ListaEnlazada();
+var listaLibros = new ListaDobleEnlazada();
+var listadelistas = new ListadeListas();
 //lista.agregar(new usuario("2354168452525", "WIlfred Perez", "wil", "wil@gmail.com", "Administrador", "123", "123-4567"));
 var arbolabb = new TreeABB();
 var grafoABB = new Grafo();
@@ -283,19 +899,19 @@ class usuario {
     }
 }
 class autor {
-    constructor(dpi, nombreautor, correo, telefono, direccion, bibliografia) {
+    constructor(dpi, nombreautor, correo, telefono, direccion, biografia) {
         this.dpi = dpi;
         this.nombreautor = nombreautor;
         this.correo = correo;
         this.telefono = telefono;
         this.direccion = direccion;
-        this.bibliografia = bibliografia;
+        this.biografia = biografia;
     }
 }
 class libro {
     constructor(isbn, nombreautor, nombrelibro, cantidad, fila, columna, paginas, categoria) {
         this.isbn = isbn;
-        this.nomnbreautor = nombreautor;
+        this.nombreautor = nombreautor;
         this.nombrelibro = nombrelibro;
         this.cantidad = cantidad;
         this.fila = fila;
@@ -306,9 +922,10 @@ class libro {
 }
 
 
-//---------------------------------------------------------------- funcion para leer el archvio json
+//---------------------------------------------------------------- FUNCION CARGAR LIBROS
 function librosCarga(e) {
     var archivo = e.target.files[0];
+    var cantidadlibros = 0;
     if (!archivo) {
         return;
     }
@@ -329,15 +946,25 @@ function librosCarga(e) {
             if (categoria == "Fantasia") {
                 matrizo.insertar(nombrelibro, parseInt(fila), parseInt(columna));
             }
+            //console.log(nombreautor);
+            //pila de ejemplares
+            let nombrePila = "pila" + cantidadlibros;
+            console.log(cantidadlibros);
+            let pila = new Pila();
+            cantidadlibros++;
+            //Lista de libros para ver
+            listaLibros.insertar(new libro(isbn, nombreautor, nombrelibro, cantidad, fila, columna, paginas, categoria));
+            //document.getElementById('ejemplares').innerHTML += nombrelibro;
         }
     }
     lector.readAsText(archivo);
+
 }
 
 document.getElementById("formLibros").addEventListener("change", librosCarga, false);
 
 
-//---------------------------------------------------------------- funcion para leer el archvio json
+//---------------------------------------------------------------- FUNCION CARGAR AUTORES
 function autorCarga(e) {
     var archivo = e.target.files[0];
 
@@ -360,6 +987,7 @@ function autorCarga(e) {
             let direccion = autorr.direccion;
             let biografia = autorr.biografia;
             arbolabb.insertar(dpi, nombreautor);
+            listaAutores.agregar(new autor(dpi, nombreautor, correo, telefono, direccion, biografia));
         }
     }
     lector.readAsText(archivo);
@@ -368,7 +996,7 @@ function autorCarga(e) {
 document.getElementById("formAutores").addEventListener("change", autorCarga, false);
 
 
-//---------------------------------------------------------------- funcion para leer el archvio json
+//---------------------------------------------------------------- FUNCION CARGAR USUARIOS
 function usuariosCarga(e) {
     var archivo = e.target.files[0];
 
@@ -400,20 +1028,26 @@ document.getElementById("formUser").addEventListener("change", usuariosCarga, fa
 
 //---------------------------------------------------------------- FUNCIONES BOTONES HTML
 
+var usuarioActivo = "";
+
 function log() {
     var usu = document.fff.nombre.value;
+    usuarioActivo = usu;
     var pas = document.fff.password.value;
     let existeUsuario = lista.buscarUsuario(usu);
     let existePass = lista.buscarPass(pas);
 
     let cualesRol = lista.buscarRol(usu);
     if (usu == "admin" && pas == "123") {
-        alert("Admin maestro")
+        //alert("Admin maestro")
         document.getElementById("cargamasiva").style.display = "";
         document.getElementById("finn").style.display = "";
+        document.getElementById("VistaLibrosOrdenados").style.display = "";
+        document.getElementById("vistaautoresbibio").style.display = "";
+        document.getElementById("matrizortogonal").style.display = "";
         document.getElementById("formLog").style.display = "none";
+        document.getElementById('logeado').innerHTML = "ADMIN MAESTRO"; //nombre
     }
-
 
     if (usu == existeUsuario && pas == existePass) {
         if (cualesRol == "Usuario") {
@@ -421,17 +1055,24 @@ function log() {
             document.getElementById('logeado').innerHTML = usu; //nombre
             document.getElementById("formLog").style.display = "none"; //formulario login
             document.getElementById("finn").style.display = ""; //boton fin
+            document.getElementById("VistaLibrosOrdenados").style.display = "";
+            document.getElementById("vistaautoresbibio").style.display = "";
+            document.getElementById("matrizortogonal").style.display = "";
         } else {
             //alert("hola " + usu + " Eres Admin");
             document.getElementById('logeado').innerHTML = "Admin";
             document.getElementById("formLog").style.display = "none";
             document.getElementById("finn").style.display = "";
             document.getElementById("cargamasiva").style.display = "";
+            document.getElementById("VistaLibrosOrdenados").style.display = "";
+            document.getElementById("vistaautoresbibio").style.display = "";
+            document.getElementById("matrizortogonal").style.display = "";
         }
     }
 }
 
 function salir() {
+    usuarioActivo = "";
     usu = "";
     pas = "";
     document.getElementById("cargamasiva").style.display = "none"; //cargas masivas de admin
@@ -440,13 +1081,28 @@ function salir() {
 }
 
 function verListaUsuarios() {
-    lista.mostrar(); //muestra en consola lista de usuarios
+    lista.mostrarUsuario(); //muestra en consola lista de usuarios
+}
+
+function verListaLibros() {
+    listaLibros.mostrarLibro(); //muestra en consola lista de libros
 }
 
 function verMatrizOrtogonal() {
     matrizo.mostrarMatriz(); //muestra en consola matriz de Fantasia
+    matrizo.libreraMatriz("vistalibrera");
+    matrizo.graph("vistaestructura");
 }
 
 function grafoArbol() {
     grafoABB.graficarArbol(arbolabb.raiz); //Grafica arbol b de autores
+    listaAutores.mostrarAutor();
+    listaAutores.verAutoresBB("autoresbibio");
+}
+
+function verListadeLibros() {
+    listaLibros.ordenBurbuja();
+    listaLibros.verLibro("vstlibros");
+    listaLibros.quick_sort(listaLibros.head, listaLibros.ultimo());
+    listaLibros.verLibro("vstlibros2");
 }
