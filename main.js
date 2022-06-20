@@ -190,6 +190,7 @@ class ListaEnlazada {
                 //console.log("----------------------------");
                 let txt = "<div class=\"cardAutores\"><div class=\"textos\">";
                 txt += "<h3>Autor: " + aux.dato.nombreautor + "</h3>";
+                txt += "<img src=\"img/autt.png\" alt=\"\">";
                 txt += "<p>Biografia: " + aux.dato.biografia + "</p>";
                 document.getElementById(div).innerHTML += txt;
                 txt = "</div></div>";
@@ -232,6 +233,32 @@ class ListaDobleEnlazada {
         }
     }
 
+    buscarLibro(nombrelibr){
+        let p;
+        if (this.head != null) {
+            p = this.head;
+            while (p != null) {
+                if (nombrelibr == p.dato.nombrelibro) {
+                    return p.dato.cantidad;
+                }
+                p = p.siguiente;
+            }
+        }
+    }
+
+    existeLibro(nombrelibr){
+        let p;
+        if (this.head != null) {
+            p = this.head;
+            while (p != null) {
+                if (nombrelibr == p.dato.nombrelibro) {
+                    return true;
+                }
+                p = p.siguiente;
+            }
+        }
+    }
+
     ultimo() {
         let temp = this.head;
         while (temp != null && temp.siguiente != null) {
@@ -259,6 +286,7 @@ class ListaDobleEnlazada {
                 //console.log("----------------------------");
                 let txt = "<div class=\"cardlibros\"><div class=\"textos\">";
                 txt += "<h3>Titulo: " + aux.dato.nombrelibro + "</h3>";
+                txt += "<img src=\"img/libro.png\" alt=\"\">";
                 txt += "<p>Autor: " + aux.dato.nombreautor + "</p>";
                 document.getElementById(div).innerHTML += txt;
                 txt = "</div></div" + contador + ">";
@@ -449,7 +477,7 @@ class ListadeListas {
     }
 
     grafic(div) {
-        var codigodot = "digraph G{\nlabel=\" ListadeListas \";\nnode [shape=box];\n";
+        var codigodot = "digraph G{\nbgcolor=\"transparent\"\nlabel=\" ListadeListas \";\nnode [shape=box];\n";
         var temporal = this.cabecera;
         var conexiones = "";
         var conexiones2 = "";
@@ -457,22 +485,22 @@ class ListadeListas {
         var numnodo = 0;
         var numnodo2 = 1;
         while (temporal != null) {
-            nodos += "N" + numnodo + "[label=\"" + temporal.dato + "\" ];\n";
+            nodos += "N" + numnodo + "[label=\"" + temporal.dato + "\" style=filled fillcolor=white ];\n";
             if (temporal.siguiente != null) {
                 var auxnum = numnodo + 1;
-                conexiones += "N" + numnodo + " -> N" + auxnum + ";\n";
+                conexiones += "N" + numnodo + " -> N" + auxnum + "[color=\"white\"];\n";
             }
             if (this.existeCabeza(temporal.dato)) {
                 var temporalnodolistasimple = temporal.abajo;
                 var cabeza = true;
                 while (temporalnodolistasimple != null) {
-                    nodos += "B" + numnodo2 + "[label=\"" + temporalnodolistasimple.valor + "\" ];\n";
+                    nodos += "B" + numnodo2 + "[label=\"" + temporalnodolistasimple.valor + "\" style=filled fillcolor=white];\n";
                     if (temporalnodolistasimple.siguiente != null) {
                         if (cabeza) {
-                            conexiones2 += "N" + numnodo + " -> B" + numnodo2 + ";\n";
+                            conexiones2 += "N" + numnodo + " -> B" + numnodo2 + "[color=\"white\"];\n";
                         }
                         var auxnum2 = numnodo2 + 1;
-                        conexiones2 += "B" + numnodo2 + " -> B" + auxnum2 + ";\n";
+                        conexiones2 += "B" + numnodo2 + " -> B" + auxnum2 + "[color=\"white\"];\n";
                     }
                     temporalnodolistasimple = temporalnodolistasimple.siguiente;
                     numnodo2++;
@@ -529,7 +557,7 @@ class Pila {
 
     //Ver la cima
     peek() {
-        console.log(this.cima.cartas);
+        console.log(this.cima.dato);
     }
 
     graficar(div) {
@@ -538,9 +566,9 @@ class Pila {
         let temporal = this.cima;
         while (temporal != null) {
             if (temporal.abajo == null) {
-                nodos += temporal.cartas
+                nodos += temporal.dato;
             } else {
-                nodos += temporal.cartas + " | ";
+                nodos += temporal.dato + " | ";
             }
             temporal = temporal.abajo;
         }
@@ -550,8 +578,6 @@ class Pila {
         console.log(codigodot);
 
         d3.select("." + div).graphviz()
-            .width(900)
-            .height(900)
             .renderDot(codigodot)
     }
 }
@@ -679,6 +705,8 @@ class Grafo {
         console.log(acumuladores[0]);
 
         d3.select(".abb").graphviz()
+        .width(1000)
+            .height(500)
             .renderDot(acumuladores[0])
     }
 
@@ -686,10 +714,10 @@ class Grafo {
         if (raiz) {
             acum[1] += raiz.id.toString() + "[label=\"" + raiz.nombre.toString() + "\",style=filled fillcolor=white];\n";
             if (raiz.izq.raiz !== null) {
-                acum[1] += "{" + raiz.id.toString() + "} -> {" + raiz.izq.raiz.id.toString() + "};\n";
+                acum[1] += "{" + raiz.id.toString() + "} -> {" + raiz.izq.raiz.id.toString() + "}[color=white];\n";
             }
             if (raiz.der.raiz !== null) {
-                acum[1] += "{" + raiz.id.toString() + "} -> {" + raiz.der.raiz.id.toString() + "};\n";
+                acum[1] += "{" + raiz.id.toString() + "} -> {" + raiz.der.raiz.id.toString() + "}[color=white];\n";
             }
             this.recorrerArbol(raiz.izq.raiz, acum);
             this.recorrerArbol(raiz.der.raiz, acum);
@@ -949,8 +977,7 @@ function librosCarga(e) {
             //console.log(nombreautor);
             //pila de ejemplares
             let nombrePila = "pila" + cantidadlibros;
-            console.log(cantidadlibros);
-            let pila = new Pila();
+
             cantidadlibros++;
             //Lista de libros para ver
             listaLibros.insertar(new libro(isbn, nombreautor, nombrelibro, cantidad, fila, columna, paginas, categoria));
@@ -1045,7 +1072,10 @@ function log() {
         document.getElementById("VistaLibrosOrdenados").style.display = "";
         document.getElementById("vistaautoresbibio").style.display = "";
         document.getElementById("matrizortogonal").style.display = "";
-        document.getElementById("formLog").style.display = "none";
+        document.getElementById("ejemplares").style.display = "";
+        document.getElementById("vistaarbolautores").style.display = "";
+        document.getElementById("listadelistasss").style.display = "";
+        document.getElementById("contentmein").style.display = "none";
         document.getElementById('logeado').innerHTML = "ADMIN MAESTRO"; //nombre
     }
 
@@ -1053,20 +1083,25 @@ function log() {
         if (cualesRol == "Usuario") {
             //alert("hola " + usu + " Eres Usuario");
             document.getElementById('logeado').innerHTML = usu; //nombre
-            document.getElementById("formLog").style.display = "none"; //formulario login
+            document.getElementById("contentmein").style.display = "none"; //formulario login
             document.getElementById("finn").style.display = ""; //boton fin
             document.getElementById("VistaLibrosOrdenados").style.display = "";
             document.getElementById("vistaautoresbibio").style.display = "";
             document.getElementById("matrizortogonal").style.display = "";
+            document.getElementById("ejemplares").style.display = "";
+            document.getElementById("vistaarbolautores").style.display = "";
         } else {
             //alert("hola " + usu + " Eres Admin");
             document.getElementById('logeado').innerHTML = "Admin";
-            document.getElementById("formLog").style.display = "none";
+            document.getElementById("contentmein").style.display = "none";
             document.getElementById("finn").style.display = "";
             document.getElementById("cargamasiva").style.display = "";
             document.getElementById("VistaLibrosOrdenados").style.display = "";
             document.getElementById("vistaautoresbibio").style.display = "";
             document.getElementById("matrizortogonal").style.display = "";
+            document.getElementById("ejemplares").style.display = "";
+            document.getElementById("vistaarbolautores").style.display = "";
+            document.getElementById("listadelistasss").style.display = "";
         }
     }
 }
@@ -1077,7 +1112,25 @@ function salir() {
     pas = "";
     document.getElementById("cargamasiva").style.display = "none"; //cargas masivas de admin
     document.getElementById("finn").style.display = "none"; //boton de fin de sesion
-    document.getElementById("formLog").style.display = ""; //ver el formulario de login
+    document.getElementById("contentmein").style.display = ""; //ver el formulario de login
+    document.getElementById("VistaLibrosOrdenados").style.display = "none"; //
+    document.getElementById("vistaautoresbibio").style.display = "none"; //
+    document.getElementById("matrizortogonal").style.display = "none"; //
+    //document.getElementById("ejemplares").style.display = "none"; //pila de libros disponi
+    document.getElementById("vistaarbolautores").style.display = "none"; //
+}
+
+var pila = new Pila();
+function mostrarPilaLibroAc(){
+    var nombrelib = document.pillll.libropilaa.value;
+    var cantidad = listaLibros.buscarLibro(nombrelib);
+    for (let index = 1; index <= cantidad; index++) {
+        pila.push(index);
+    }
+    pila.graficar("pila");
+    for (let index = 0; index < cantidad; index++) {
+        pila.pop();
+    }
 }
 
 function verListaUsuarios() {
@@ -1105,4 +1158,19 @@ function verListadeLibros() {
     listaLibros.verLibro("vstlibros");
     listaLibros.quick_sort(listaLibros.head, listaLibros.ultimo());
     listaLibros.verLibro("vstlibros2");
+}
+
+function perdirlibro(){
+    var nombrelib = document.pedirlib.nombrelibro.value;
+    var cantidad = document.pedirlib.cantidadlibro.value;
+
+    if(listaLibros.existeLibro(nombrelib)){
+        for (let index = 1; index <= cantidad; index++) {
+            listadelistas.insertar(usuarioActivo, nombrelib);
+        }
+    }
+}
+
+function mostrarListadeListas(){
+    listadelistas.grafic("listalistas");
 }

@@ -340,6 +340,11 @@ ul li a:hover {
   background-position: center center;
   color: white;
   background: rgb(52, 47, 47);
+  display: grid;
+}
+
+img{
+  width: 100%;
 }
 
 .vistalibrera {
@@ -360,4 +365,18 @@ ul li a:hover {
   width: 40px;
   display: grid;
   grid-template-rows: auto;
+}
+
+.pila{
+  width: 500px;
+  height: auto;
+}
+
+.pilaslibros{
+  justify-content: center;
+}
+
+.contenedorarbol{
+  width: 1000px;
+  height: auto;
 }

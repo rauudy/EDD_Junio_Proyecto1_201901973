@@ -13,7 +13,7 @@
     <div class="main">
         <div class="navbar">
             <div class="icon">
-                <h2 class="logo">Catsbooks</h2>
+                <h3 class="logo">Catsbooks</h3>
             </div>
 
             <div class="menu">
@@ -29,7 +29,6 @@
                 <input onclick="salir()" class="" id="finn" type="button" name="" value="Salir" style="display: none;">
             </div>
         </div>
-
         <div class="carga" id="cargamasiva" style="display: none;">
             <div class="clientes">
                 <label for="formUser">Usuarios</label>
@@ -48,9 +47,10 @@
             <button class="btnlista" onclick="verListadeLibros()">Mostrar Vista Libros</button>
             <button class="btnlista" onclick="verMatrizOrtogonal()">Mostrar Fantasia</button>
             <button class="btnlista" onclick="grafoArbol()">Mostrar Grafo Abb</button>
+            <button class="btnlista" onclick="mostrarListadeListas()">Mostrar Lista De Listas</button>
         </div>
 
-        <dav class="content">
+        <dav class="content" id="contentmein">
             <h1>Hola<br><span id="logeado" class="logeado">Gatitos</span><br>Como estas</h1>
             <p class="par">La librería “Catsbooks” posee varias sucursales dentro del País,<br> esta cuenta con una gran
                 cantidad de libros, revistas, historietas y <br>demás material de lectura. Debido a la pandemia las
@@ -68,30 +68,56 @@
             </div>
         </dav>
     </div>
+    <div class="listadelistasss" id="listadelistasss" style="display: none;">
+        <h3 style="color: white;">Lista de Listas</h3>
+        <div class="contenedorlistadelis">
+            <div class="listalistas" id="listalistas"></div>
+        </div>
+    </div>
     <div class="vistaautoresbibio" id="vistaautoresbibio" style="display: none;">
+        <h3 style="color: white;">Autores</h3>
         <div class="autoresbibio" id="autoresbibio">
             <!--grid de los Autores-->
         </div>
     </div>
 
-    <div class="ejemplares" id="ejemplares">
+    <div class="ejemplares" id="ejemplares" style="display: none;">
+        <h3 style="color: white;">Pila Libros</h3>
+        <div class="pilaslibros" style="display: flex;">
+            <div class="pila" id="pila">
+                <!--LIBROS PILA-->
+            </div>
+            <div class="mostrarPilaLibro">
+                <form name="pillll" action="MostrarLibroPila">
+                    <label for="txtlibropila" style="color: white;">Nombre Libro</label>
+                    <input type="txt" name="libropilaa" id="txtlibropila" class="txtlibropila" placeholder="Nombre Libro">
+                    <input onclick="mostrarPilaLibroAc()" type="button" class="btnnPila" value="Mostrar">
+                </form>
+            </div>
+        </div>
     </div>
+
     <div class="vistalibros" style="display: none;" id="VistaLibrosOrdenados">
-        <h2 style="color: white;">Vista Libro Ascendente</h2>
+        <h3 style="color: white;">Vista Libro Ascendente</h3>
         <div class="vstlibros" id="vstlibros">
             <!--grid de los Libro-->
         </div>
-        <h2 style="color: white;">Vista Libro Descendente</h2>
+        <h3 style="color: white;">Vista Libro Descendente</h3>
         <div class="vstlibros" id="vstlibros2">
             <!--grid de los Libro-->
         </div>
     </div>
-    <div class="vistaarbolautores">
-        <div class="abb"></div>
+
+    
+    <div class="vistaarbolautores" id="vistaarbolautores" style="display: none;">
+        <h3 style="color: white;">Arbol Autores</h3>
+        <div class="contenedorarbol" id="contenedorarbol">
+            <div class="abb"></div>
+        </div>
     </div>
 
     <div class="matrizortogonal" id="matrizortogonal" style="display: none;">
-        <h2 style="color: white;">Librera de Fantasia</h2>
+        <h3 style="color: white;">Librera de Fantasia</h3>
         <div class="ortogonalLibrera" id="ortogonalLibrera">
             <div class="vistalibrera" id="vistalibrera"></div>
             <div class="pedirlibros" id="pedirlibros">
@@ -100,7 +126,7 @@
                     <input type="txt" name="nombrelibro" id="nombrelibroooo" class="pedi" placeholder="Nombre Libro">
                     <label for="cantidadlibrooo" style="color: white;">Cantidad Libro</label>
                     <input type="txt" name="cantidadlibro" id="cantidadlibrooo" class="pedi" placeholder="Cantidad de Libro">
-                    <input onclick="log()" type="button" class="btnnpedi" value="comprar">
+                    <input onclick="perdirlibro()" type="button" class="btnnpedi" value="comprar">
                 </form>
             </div>
         </div>
