@@ -43,9 +43,11 @@
                 <input class="form-control" type="file" id="formLibros">
             </div>
             <button class="btnlista" onclick="verListaUsuarios()">Mostrar usuarios</button>
+            <button class="btnlista" onclick="mostrarCola()">Mostrar Cola</button>
             <button class="btnlista" onclick="verListaLibros()">Mostrar libros</button>
             <button class="btnlista" onclick="verListadeLibros()">Mostrar Vista Libros</button>
             <button class="btnlista" onclick="verMatrizOrtogonal()">Mostrar Fantasia</button>
+            <button class="btnlista" onclick="verMatrizDispersa()">Mostrar Thriller</button>
             <button class="btnlista" onclick="grafoArbol()">Mostrar Grafo Abb</button>
             <button class="btnlista" onclick="mostrarListadeListas()">Mostrar Lista De Listas</button>
         </div>
@@ -67,6 +69,12 @@
                 </form>
             </div>
         </dav>
+    </div>
+    <div class="mostrarColaa" id="mostrarColaa" style="display: none;">
+        <h3 style="color: white;">Cola Espera</h3>
+        <div class="contenedorCola" id="contenedorCola">
+            <div class="cola" id="cola"></div>
+        </div>
     </div>
     <div class="listadelistasss" id="listadelistasss" style="display: none;">
         <h3 style="color: white;">Lista de Listas</h3>
@@ -132,6 +140,25 @@
         </div>
         <div class="ortogonalestructura" id="ortogonalestructura">
             <div class="vistaestructura" id="vistaestructura"></div>
+        </div>
+    </div>
+
+    <div class="matrizdispersa" id="matrizdispersa" style="display: none;">
+        <h3 style="color: white;">Librera de Thriller</h3>
+        <div class="dispersaLibrera" id="dispersaLibrera">
+            <div class="vistalibreraDisp" id="vistalibreraDisp"></div>
+            <div class="pedirlibrosTh" id="pedirlibrosTh">
+                <form class="formpedirlibroTh" name="pedirlibTh" action="PedirLibroTh">
+                    <label for="nombrelibrooooTh" style="color: white;">Nombre Libro</label>
+                    <input type="txt" name="nombrelibroTh" id="nombrelibrooooTh" class="pediTh" placeholder="Nombre Libro">
+                    <label for="cantidadlibroooTh" style="color: white;">Cantidad Libro</label>
+                    <input type="txt" name="cantidadlibroTh" id="cantidadlibroooTh" class="pediTh" placeholder="Cantidad de Libro">
+                    <input onclick="perdirlibroTh()" type="button" class="btnnpediTh" value="comprar">
+                </form>
+            </div>
+        </div>
+        <div class="dispersaestructura" id="dispersaestructura">
+            <div class="vistaestructuraDis" id="vistaestructuraDis"></div>
         </div>
     </div>
 

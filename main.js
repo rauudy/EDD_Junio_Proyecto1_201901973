@@ -316,44 +316,45 @@ class ListaDobleEnlazada {
         }
     }
 
-    parition(first, last) {
-        var front, pivot, temp;
-        pivot = first;
-        front = first;
+    ordenQuickSort(primero, ulti) {
+        var pivot;
+        if (primero === ulti) {
+            return;
+        }
+        pivot = this.dividir(primero, ulti);
+        if (pivot !== null && pivot.siguiente !== null) {
+            this.ordenQuickSort(pivot.siguiente, ulti);
+        }
+        if (pivot !== null && primero !== pivot) {
+            this.ordenQuickSort(primero, pivot);
+        }
+    }
+
+    dividir(primero, ulti) {
+        var frente, pivot, temp;
+        pivot = primero;
+        frente = primero;
         temp = 0;
 
-        while (front !== null && front !== last) {
-            if (front.dato.nombrelibro > last.dato.nombrelibro) { // Ascendente < , Descendente >
-                pivot = first;
-                temp = first.dato;
-                first.dato = front.dato;
-                front.dato = temp;
-                first = first.siguiente;
+        while (frente !== null && frente !== ulti) {
+            if (frente.dato.nombrelibro > ulti.dato.nombrelibro) { // Ascendente < , Descendente >
+                pivot = primero;
+                temp = primero.dato;
+                primero.dato = frente.dato;
+                frente.dato = temp;
+                primero = primero.siguiente;
             }
-
-            front = front.siguiente;
+            frente = frente.siguiente;
         }
 
-        temp = first.dato;
-        first.dato = last.dato;
-        last.dato = temp;
+        temp = primero.dato;
+        primero.dato = ulti.dato;
+        ulti.dato = temp;
         return pivot;
     }
 
 
-    quick_sort(first, last) {
-        var pivot;
-        if (first === last) {
-            return;
-        }
-        pivot = this.parition(first, last);
-        if (pivot !== null && pivot.siguiente !== null) {
-            this.quick_sort(pivot.siguiente, last);
-        }
-        if (pivot !== null && first !== pivot) {
-            this.quick_sort(first, pivot);
-        }
-    }
+    
 
     graficar(div) {
         var codigodot = "digraph G{\nbgcolor=\"transparent\"\nlabel=\" Libros \";\nnode [shape=box];\n";
@@ -585,8 +586,10 @@ class Pila {
 //---------------------------------------------------------------- COLA DE ESPERA
 
 class NodoCC {
-    constructor(dato) {
-        this.dato = dato;
+    constructor(nombre,libro,cantidad) {
+        this.nombre = nombre;
+        this.libro = libro;
+        this.cantidad = cantidad;
         this.siguiente = null;
     }
 }
@@ -596,8 +599,8 @@ class Cola {
         this.frente = null;
     }
 
-    enqueue(dato) {
-        let nuevo = new NodoCC(dato);
+    enqueue(nombre,libro,cantidad) {
+        let nuevo = new NodoCC(nombre,libro,cantidad);
         nuevo.siguiente = null;
         if (this.frente != null) {
             let aux = this.frente;
@@ -612,7 +615,7 @@ class Cola {
 
     peek() {
         if (this.frente != null) {
-            console.log("Frente: " + this.frente.dato);
+            console.log("Frente: " + this.frente.nombre);
         }
     }
 
@@ -624,14 +627,14 @@ class Cola {
         }
     }
 
-    graficar() {
+    graficar(div) {
         var codigodot = "digraph G{\nbgcolor=\"transparent\"\nlabel=\" Cola \";\nnode [shape=box];\n";
         var temporal = this.frente;
         var conexiones = "";
         var nodos = "";
         var numnodo = 0;
         while (temporal != null) {
-            nodos += "N" + numnodo + "[label=\"" + temporal.dato + "\" style=filled fillcolor=yellow];\n";
+            nodos += "N" + numnodo + "[label=\"Cliente: " + temporal.nombre +"\nLibro: "+ temporal.libro + "\nCantidad: "+ temporal.cantidad + "\" style=filled fillcolor=yellow];\n";
             if (temporal.siguiente != null) {
                 var auxnum = numnodo + 1;
                 conexiones += "N" + numnodo + " -> N" + auxnum + ";\n";
@@ -645,7 +648,7 @@ class Cola {
         codigodot += "{rank=same;\n" + conexiones + "\n}\n}";
         //console.log(codigodot);
 
-        d3.select(".lienzo").graphviz()
+        d3.select("."+div).graphviz()
             .width(900)
             .height(100)
             .renderDot(codigodot)
@@ -902,6 +905,310 @@ class MatrizO {
 }
 
 
+//---------------------------------------------------------------- MATRIZ DISPERSA
+class nodoMD{
+    constructor(dato,x,y){
+        this.dato=dato;
+        this.x=x;
+        this.y=y;
+        this.siguiente=null;
+        this.anterior=null;
+        this.abajo=null
+        this.arriba=null
+    }    
+}
+
+class matrizDispersaaa{
+    constructor(){
+        this.raiz= new nodoMD("raiz",-1,-1);
+    }
+
+    buscarFil(y) {
+        let auxiliar = this.raiz;
+        while (auxiliar != null) {
+            if (auxiliar.y == y) {
+                return auxiliar;
+            }
+            auxiliar = auxiliar.abajo;
+        }
+        return null;
+    }
+
+    buscarCol(x) {
+        let auxiliar = this.raiz;
+        while (auxiliar != null) {
+            if (auxiliar.x == x) {
+                return auxiliar;
+            }
+            auxiliar = auxiliar.siguiente;
+        }
+        return null;
+    }
+
+    crearColumna(x) {
+        let columna = this.raiz;
+        let nuevo = new nodoMD("COL",x, -1);
+        let colmm = this.insertarOrdenadoColumna(nuevo, columna);
+        return colmm;
+    }
+
+    insertarOrdenadoColumna(nuevo,cabezaColumna) {
+        let auxiliar = cabezaColumna;
+        let agregado = false;
+        while (true) {
+            if (nuevo.x == auxiliar.x) {
+                auxiliar.y = nuevo.y;
+                auxiliar.dato = nuevo.dato;
+                return auxiliar;
+            } else if (auxiliar.x > nuevo.x) {
+                agregado = true;
+                break;
+            }
+            if (auxiliar.siguiente != null) {
+                auxiliar = auxiliar.siguiente;
+            } else {
+                agregado = false;
+                break;
+            }
+        }
+        if (agregado) {
+            nuevo.siguiente = auxiliar;
+            auxiliar.anterior.siguiente = nuevo;
+            nuevo.anterior = auxiliar.anterior;
+            auxiliar.anterior = nuevo;
+        } else {
+            auxiliar.siguiente = nuevo;
+            nuevo.anterior = auxiliar;
+        }
+        return nuevo;
+    }
+
+    crearFila(y) {
+        let nodoFilaaa = this.raiz;
+        let nuevo = new nodoMD("FIL",-1, y);
+        let column = this.insertarOrdenadoFila(nuevo, nodoFilaaa);
+        return column;
+    }
+
+    insertarOrdenadoFila(nuevo,cabezaFila) {
+        let auxiliar = cabezaFila;
+        let agregado = false;
+        while (true) {
+            if (nuevo.y == auxiliar.y) {
+                auxiliar.x = nuevo.x;
+                auxiliar.dato = nuevo.dato;
+                return auxiliar;
+            } else if (auxiliar.y > nuevo.y) {
+                agregado = true;
+                break;
+            }
+            if (auxiliar.abajo != null) {
+                auxiliar = auxiliar.abajo;
+            } else {
+                agregado = false;
+                break;
+            }
+        }
+        if (agregado) {
+            nuevo.abajo = auxiliar;
+            auxiliar.arriba.abajo = nuevo;
+            nuevo.arriba = auxiliar.arriba;
+            auxiliar.arriba = nuevo;
+        } else {
+            auxiliar.abajo = nuevo;
+            nuevo.arriba = auxiliar;
+        }
+        return nuevo;
+    }
+
+    insertarNodo(dato,x,y) {
+        let nuevo = new nodoMD(dato,x,y);
+        let nodoColummm = this.buscarCol(x);
+        let nodoFilaaa = this.buscarFil(y);
+        if (nodoColummm == null && nodoFilaaa == null) { //Caso1
+            nodoColummm = this.crearColumna(x);
+            nodoFilaaa = this.crearFila(y);
+            nuevo = this.insertarOrdenadoColumna(nuevo, nodoFilaaa);
+            nuevo = this.insertarOrdenadoFila(nuevo, nodoColummm);
+        } else if (nodoFilaaa == null && nodoColummm != null) { //caso2
+            nodoFilaaa = this.crearFila(y);
+            nuevo = this.insertarOrdenadoColumna(nuevo, nodoFilaaa);
+            nuevo = this.insertarOrdenadoFila(nuevo, nodoColummm);
+        } else if (nodoFilaaa != null && nodoColummm == null) { //caso3
+            nodoColummm = this.crearColumna(x);
+            nuevo = this.insertarOrdenadoColumna(nuevo, nodoFilaaa);
+            nuevo = this.insertarOrdenadoFila(nuevo, nodoColummm);
+        } else if (nodoFilaaa != null && nodoColummm != null) { //caso4
+            nuevo = this.insertarOrdenadoColumna(nuevo, nodoFilaaa);
+            nuevo = this.insertarOrdenadoFila(nuevo, nodoColummm);
+        }
+    }
+
+    graphviz(div){
+        let dott = "digraph G{\nbgcolor=\"transparent\"  label=\" Librera Thriller \";\n  node [shape=box];\n";
+        let fil = "F";
+        let col = "C";
+        let antX="";
+        let antY="";
+        let columnaU = "";
+        let casilla="";
+        let actualFila=0;
+        let filaU="";
+        let nodos = "";
+        let conect="";
+        let conectar="";
+        let conectando="";
+        let temporal = this.raiz;
+        while (temporal != null) {
+            let temporal2 = temporal;
+            while (temporal2 != null) {
+                if(temporal2.x < 0 && temporal2.y < 0){
+                    nodos += "  "+"Raiz[label = \"Raiz\" width = 1.5 style = filled fillcolor=yellow, group = -1];\n";
+                    antX="Raiz";
+                    antY="Raiz";
+                }else if(temporal2.y<0){
+                    nodos += "  "+fil+temporal2.x+ "[label = \"" + fil + temporal2.x + "\" width = 1.5 style = filled fillcolor=yellow, group = -1 ];\n";
+                    conect += "  "+antX + " -> " + fil + temporal2.x+"[dir=both color=white];\n";
+                    antX = fil + temporal2.x;
+                }else if(temporal2.x<0){
+                    nodos += "  "+col + temporal2.y + "[label = \"" + col + temporal2.y+ "\" width = 1.5 style = filled fillcolor=yellow, group = "+temporal2.y+" ];\n";
+                    conectar += "   "+antY + " -> " + col + temporal2.y+"[dir=both color=white];\n";
+                    antY = col + temporal2.y;
+                }else if(temporal2.x >= 0 && temporal2.y >= 0){
+                    if (actualFila == 0) {                                                                                               
+                        nodos += "  "+fil + temporal2.x + col + temporal2.y + "[label = \"" + temporal2.dato + "\" width = 1.5 style = filled fillcolor=grey, group = "+temporal2.y+"];\n";                        
+                        columnaU=columnaU+"  "+fil + temporal2.x + col + temporal2.y + " -> " + col + temporal2.y+"[dir=both color=white];\n";
+                        casilla = fil + temporal2.x + col + temporal2.y;
+                    } else {
+                        nodos += "  "+fil + temporal2.x + col + temporal2.y + "[label = \"" + temporal2.dato + "\" width = 1.5 style = filled fillcolor=grey, group = "+temporal2.y+"];\n";
+                        columnaU=columnaU+"  "+fil + temporal2.x + col + temporal2.y + " -> " +casilla+"[dir=both color=white];\n";
+                        casilla = fil + temporal2.x + col + temporal2.y;  
+                    }
+                    actualFila++;
+                }
+                temporal2 = temporal2.siguiente;
+            }
+            actualFila = 0;
+            casilla = "";
+            temporal = temporal.abajo;
+        }
+        let auxiliar = this.raiz;
+        while (auxiliar != null) {
+            let unFin = "";
+            let auxiliar2 = auxiliar;
+            while (auxiliar2 != null) {
+                if(auxiliar2.x >= 0 && auxiliar2.y < 0){
+                    unFin += fil+auxiliar2.x+"->";
+                }else if(auxiliar2.x>=0 && auxiliar2.y>=0){
+                    if(auxiliar2.abajo != null){
+                        unFin += fil+auxiliar2.x+col+auxiliar2.y+"->";
+                    }else{
+                        unFin += fil+auxiliar2.x+col+auxiliar2.y +"[dir=both color=white]";
+                    }
+                }
+                auxiliar2 = auxiliar2.abajo;
+            }
+            conectando += "  {rank=same;"+unFin+"}\n"
+            auxiliar = auxiliar.siguiente;
+        }
+        dott += nodos;
+        dott += conectando
+        dott += conect;
+        dott += filaU;
+        dott += columnaU;
+        dott += "  {rank=same;\n"+conectar+"  }\n}"
+
+        //console.log(dott)
+        
+        d3.select("."+div).graphviz()
+        .width(1300)
+        .height(800)
+        .renderDot(dott)
+    }
+
+    graphvizLibreria(div){
+        let dott = "digraph G{\nbgcolor=\"transparent\"  label=\" Librera Thriller \";\n  node [shape=box];\n";
+        let fil = "F";
+        let col = "C";
+        let antX="";
+        let antY="";
+        let columnaU = "";
+        let casilla="";
+        let actualFila=0;
+        let filaU="";
+        let nodos = "";
+        let conect="";
+        let conectar="";
+        let conectando="";
+        let temporal = this.raiz;
+        while (temporal != null) {
+            let temporal2 = temporal;
+            while (temporal2 != null) {
+                if(temporal2.x < 0 && temporal2.y < 0){
+                    nodos += "  "+"Raiz[label = \"Raiz\" width = 1.5 style = filled fillcolor=transparent, group = -1];\n";
+                    antX="Raiz";
+                    antY="Raiz";
+                }else if(temporal2.y<0){
+                    nodos += "  "+fil+temporal2.x+ "[label = \"" + fil + temporal2.x + "\" width = 1.5 style = filled fillcolor=transparent, group = -1 ];\n";
+                    conect += "  "+antX + " -> " + fil + temporal2.x+"[dir=both color=transparent];\n";
+                    antX = fil + temporal2.x;
+                }else if(temporal2.x<0){
+                    nodos += "  "+col + temporal2.y + "[label = \"" + col + temporal2.y+ "\" width = 1.5 style = filled fillcolor=transparent, group = "+temporal2.y+" ];\n";
+                    conectar += "   "+antY + " -> " + col + temporal2.y+"[dir=both color=transparent];\n";
+                    antY = col + temporal2.y;
+                }else if(temporal2.x >= 0 && temporal2.y >= 0){
+                    if (actualFila == 0) {                                                                                               
+                        nodos += "  "+fil + temporal2.x + col + temporal2.y + "[label = \"" + temporal2.dato + "\" width = 1.5 style = filled fillcolor=grey, group = "+temporal2.y+"];\n";                        
+                        columnaU=columnaU+"  "+fil + temporal2.x + col + temporal2.y + " -> " + col + temporal2.y+"[dir=both color=transparent];\n";
+                        casilla = fil + temporal2.x + col + temporal2.y;
+                    } else {
+                        nodos += "  "+fil + temporal2.x + col + temporal2.y + "[label = \"" + temporal2.dato + "\" width = 1.5 style = filled fillcolor=grey, group = "+temporal2.y+"];\n";
+                        columnaU=columnaU+"  "+fil + temporal2.x + col + temporal2.y + " -> " +casilla+"[dir=both color=transparent];\n";
+                        casilla = fil + temporal2.x + col + temporal2.y;  
+                    }
+                    actualFila++;
+                }
+                temporal2 = temporal2.siguiente;
+            }
+            actualFila = 0;
+            casilla = "";
+            temporal = temporal.abajo;
+        }
+        let auxiliar = this.raiz;
+        while (auxiliar != null) {
+            let unFin = "";
+            let auxiliar2 = auxiliar;
+            while (auxiliar2 != null) {
+                if(auxiliar2.x >= 0 && auxiliar2.y < 0){
+                    unFin += fil+auxiliar2.x+"->";
+                }else if(auxiliar2.x>=0 && auxiliar2.y>=0){
+                    if(auxiliar2.abajo != null){
+                        unFin += fil+auxiliar2.x+col+auxiliar2.y+"->";
+                    }else{
+                        unFin += fil+auxiliar2.x+col+auxiliar2.y +"[dir=both color=transparent]";
+                    }
+                }
+                auxiliar2 = auxiliar2.abajo;
+            }
+            conectando += "  {rank=same;"+unFin+"}\n"
+            auxiliar = auxiliar.siguiente;
+        }
+        dott += nodos;
+        dott += conectando
+        dott += conect;
+        dott += filaU;
+        dott += columnaU;
+        dott += "  {rank=same;\n"+conectar+"  }\n}"
+
+        //console.log(dott)
+        
+        d3.select("."+div).graphviz()
+        .width(1300)
+        .height(800)
+        .renderDot(dott)
+    }
+}
+
 //---------------------------------------------------------------- ESTRUCTURAS
 var lista = new ListaEnlazada();
 var listaAutores = new ListaEnlazada();
@@ -913,6 +1220,9 @@ var grafoABB = new Grafo();
 
 var matrizo = new MatrizO();
 matrizo.llenarMatrizOrtogonal();
+var matrizdis = new matrizDispersaaa();
+
+var colaEspera = new Cola();
 
 //---------------------------------------------------------------- CLASES PARA LOS ARCHIVOS
 class usuario {
@@ -973,6 +1283,8 @@ function librosCarga(e) {
             let categoria = books.categoria;
             if (categoria == "Fantasia") {
                 matrizo.insertar(nombrelibro, parseInt(fila), parseInt(columna));
+            }else if (categoria == "Thriller"){
+                matrizdis.insertarNodo(nombrelibro, parseInt(fila), parseInt(columna));
             }
             //console.log(nombreautor);
             //pila de ejemplares
@@ -1072,9 +1384,11 @@ function log() {
         document.getElementById("VistaLibrosOrdenados").style.display = "";
         document.getElementById("vistaautoresbibio").style.display = "";
         document.getElementById("matrizortogonal").style.display = "";
+        document.getElementById("matrizdispersa").style.display = ""; //
         document.getElementById("ejemplares").style.display = "";
         document.getElementById("vistaarbolautores").style.display = "";
         document.getElementById("listadelistasss").style.display = "";
+        document.getElementById("mostrarColaa").style.display = "";
         document.getElementById("contentmein").style.display = "none";
         document.getElementById('logeado').innerHTML = "ADMIN MAESTRO"; //nombre
     }
@@ -1088,8 +1402,10 @@ function log() {
             document.getElementById("VistaLibrosOrdenados").style.display = "";
             document.getElementById("vistaautoresbibio").style.display = "";
             document.getElementById("matrizortogonal").style.display = "";
+            document.getElementById("matrizdispersa").style.display = ""; //
             document.getElementById("ejemplares").style.display = "";
             document.getElementById("vistaarbolautores").style.display = "";
+            document.getElementById("mostrarColaa").style.display = "";
         } else {
             //alert("hola " + usu + " Eres Admin");
             document.getElementById('logeado').innerHTML = "Admin";
@@ -1099,9 +1415,11 @@ function log() {
             document.getElementById("VistaLibrosOrdenados").style.display = "";
             document.getElementById("vistaautoresbibio").style.display = "";
             document.getElementById("matrizortogonal").style.display = "";
+            document.getElementById("matrizdispersa").style.display = ""; //
             document.getElementById("ejemplares").style.display = "";
             document.getElementById("vistaarbolautores").style.display = "";
             document.getElementById("listadelistasss").style.display = "";
+            document.getElementById("mostrarColaa").style.display = "";
         }
     }
 }
@@ -1116,6 +1434,8 @@ function salir() {
     document.getElementById("VistaLibrosOrdenados").style.display = "none"; //
     document.getElementById("vistaautoresbibio").style.display = "none"; //
     document.getElementById("matrizortogonal").style.display = "none"; //
+    document.getElementById("matrizdispersa").style.display = "none"; //
+    document.getElementById("mostrarColaa").style.display = "none"; //
     //document.getElementById("ejemplares").style.display = "none"; //pila de libros disponi
     document.getElementById("vistaarbolautores").style.display = "none"; //
 }
@@ -1147,6 +1467,12 @@ function verMatrizOrtogonal() {
     matrizo.graph("vistaestructura");
 }
 
+function verMatrizDispersa() {
+    matrizdis.graphvizLibreria("vistalibreraDisp");
+    matrizdis.graphviz("vistaestructuraDis");
+}
+
+
 function grafoArbol() {
     grafoABB.graficarArbol(arbolabb.raiz); //Grafica arbol b de autores
     listaAutores.mostrarAutor();
@@ -1156,13 +1482,20 @@ function grafoArbol() {
 function verListadeLibros() {
     listaLibros.ordenBurbuja();
     listaLibros.verLibro("vstlibros");
-    listaLibros.quick_sort(listaLibros.head, listaLibros.ultimo());
+    listaLibros.ordenQuickSort(listaLibros.head, listaLibros.ultimo());
     listaLibros.verLibro("vstlibros2");
 }
 
 function perdirlibro(){
     var nombrelib = document.pedirlib.nombrelibro.value;
     var cantidad = document.pedirlib.cantidadlibro.value;
+
+    let cantidadExistente = listaLibros.buscarLibro(nombrelib);
+
+    if(cantidad >cantidadExistente){
+        let pedidos = cantidad-cantidadExistente;
+        colaEspera.enqueue(usuarioActivo,nombrelib,pedidos)
+    }
 
     if(listaLibros.existeLibro(nombrelib)){
         for (let index = 1; index <= cantidad; index++) {
@@ -1171,6 +1504,30 @@ function perdirlibro(){
     }
 }
 
+function perdirlibroTh(){
+    var nomlibb = document.pedirlibTh.nombrelibroTh.value;
+    var cantidads = document.pedirlibTh.cantidadlibroTh.value;
+
+    let cantidadExistente = listaLibros.buscarLibro(nomlibb);
+
+    if(cantidads >cantidadExistente){
+        let pedidos = cantidads-cantidadExistente;
+        colaEspera.enqueue(usuarioActivo,nombrelib,pedidos)
+    }
+    if(listaLibros.existeLibro(nomlibb)){
+        for (let index = 1; index <= cantidads; index++) {
+            listadelistas.insertar(usuarioActivo, nomlibb);
+        }
+    }
+}
+
 function mostrarListadeListas(){
     listadelistas.grafic("listalistas");
+}
+
+function mostrarCola(){
+    colaEspera.graficar("cola")
+}
+
+function mostrarTop(){
 }
